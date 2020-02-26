@@ -2,8 +2,8 @@
     <div class="cmt-container">
         <h3>发表评论</h3>
         <hr>
-        <textarea placeholder="请输入要评论的内容（最多吐槽120字）" maxlength="120"></textarea>
-        <mt-button type="primary" size="large">发表评论 </mt-button>
+        <textarea placeholder="请输入要评论的内容（最多吐槽120字）" maxlength="120" v-model="msg"></textarea>
+        <mt-button type="primary" size="large" @click="postComment">发表评论</mt-button>
 
         <div class="cmt-list">
             <div class="cmt-item"v-for="(item,i) in comments" :key="item.add_time">
@@ -25,7 +25,8 @@
         data() {
             return {
                 pageIndex: 1, //默认展示第一页数据
-                comments: [] //所有的评论数据
+                comments: [], //所有的评论数据
+                msg: ''  // 评论输入的内容
             };
         },
         created() {
@@ -46,6 +47,29 @@
             getMore() { //加载更多
                 this.pageIndex++;
                 this.getComments();
+            },
+            postComment() {
+                // 校验是否为空内容
+                if(this.msg.trim().length === 0){
+                    return Toast("评论内容不能为空！")
+                }
+
+                // 发表评论
+                this.$http.post('api/postcomment/' + this.$route.params.id, {
+                    content: this.msg.trim()
+                })
+                .then(function () {
+                    if(result.body.status === 0 ) {
+                        // 拼接出一个评论对象
+                        var cmt = {
+                            user_name: '匿名用户',
+                            add_time: Date.now(),
+                            content: this.msg.trim()
+                        };
+                        this.comments.unshift(cmt);
+                        this.msg = "";
+                    }
+                })
             }
         },
         props: ['id']
