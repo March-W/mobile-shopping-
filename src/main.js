@@ -19,7 +19,7 @@ import VueResource from 'vue-resource'
 // 2.2 安装 vue-resource
 Vue.use(VueResource);
 //设置全局根路径
-Vue.http.options.root = 'http://vue.studyit.io'; //http://127.0.0.1:8899
+Vue.http.options.root = 'http://api.cms.liulongbin.top'; //http://127.0.0.1:8899 http://vue.studyit.io
 // 全局设置 post 时候表单数据格式形式 application/x-www-form-urlencoded
 Vue.http.options.emulateJSON = true;
 
