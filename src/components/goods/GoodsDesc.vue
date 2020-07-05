@@ -13,7 +13,7 @@
         data(){
             return {
                 info: {} //图文数据
-            }
+            };
         },
         created() {
             this.getGoodsDesc();

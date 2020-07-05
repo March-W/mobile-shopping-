@@ -14,7 +14,7 @@
         </div>
 
         <!--图片内容区域-->
-        <div class="content"></div>
+        <div class="content" v-html="photoinfo.content"></div>
 
         <!--放置一个现成的 评论子组件-->
         <cmt-box :id="id"></cmt-box>
@@ -44,11 +44,11 @@
                     if(result.body.status === 0) {
                         this.photoinfo = result.body.message[0];
                     }
-                })
+                });
             },
             getThumbs() {
                 // 获取缩略图
-                this.$http.get('api/getthumimages/'+this.id).then(result => {
+                this.$http.get('api/getthumimages/' + this.id).then(result => {
                     if(result.body.status === 0){
                         // 循环每个图片数据，补全图片的宽和高
                         result.body.message.forEach(item => {
@@ -62,7 +62,7 @@
             }
         },
         components: {
-            "cmt-box": comment
+            "cmt-box": comment //注册评论子组件
         }
     }
 </script>

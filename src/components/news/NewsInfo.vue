@@ -19,13 +19,13 @@
 </template>
 
 <script>
-    //导入 评论 子组件
+    //导入评论子组件
     import comment from '../subcommponents/comment.vue'
 
     export default {
         data() {
             return {
-                id: this.$route.params.id, // 将 URL 地址中传递过来的 ID值，挂载到 data上，方便以后调用
+                id: this.$route.params.id, // 将URL地址中传递过来的ID值，挂载到data上，方便以后调用
                 newsinfo: {} //新闻对象
             };
         },
@@ -34,11 +34,11 @@
         },
         methods: {
             getNewsInfo() {   // 获取新闻详情
-                this.$http.get('api/getnew'+this.id).then(result => {
+                this.$http.get('api/getnew/' + this.id).then(result => {
                     if(result.body.status === 0) {
                         this.newsinfo = result.body.message[0];
                     } else {
-                        Toast('获取新闻失败！')
+                        Toast('获取新闻失败！');
                     }
                 });
             }
@@ -49,7 +49,8 @@
     }
 </script>
 
-<style lang="scss"> //去掉scoped
+<!--去掉scoped-->
+<style lang="scss">
     .newsinfo-container {
         padding: 0 4px;
         .title {

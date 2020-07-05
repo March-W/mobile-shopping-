@@ -13,11 +13,11 @@
 
 		<!--图片列表区域-->
 		<ul class="photo-list">
-			<router-link v-for="item in list" :key="item.id" :to="'/home/photoinfo/'+item.id" tag="li">
+			<router-link v-for="item in list" :key="item.id" :to="'/home/photoinfo/' + item.id" tag="li">
 				<img v-lazy="item.img_url">
 				<div class="info">
 					<h1 class="info-title">{{ item.title }}</h1>
-					<div class="info-body">{{ item.zhiyao }}</div>
+					<div class="info-body">{{ item.zhaiyao }}</div>
 				</div>
 			</router-link>
 		</ul>
@@ -42,7 +42,7 @@
 		mounted() {
             //当组件中的DOM结构被渲染好并放到页面中后，会执行这个 钩子函数
 			// 如果要操作元素，最好在 mounted 里面，因为这时候的 DOM 元素 是最新的
-          // 初始化滑动控件
+            // 初始化滑动控件
 			mui('.mui-scroll-wrapper').scroll({
 				deceleration: 0.00005  // click 减速系数
 			});
@@ -52,19 +52,19 @@
 			    // 获取所有的图片分类
 				this.$http.get('api/getimgcategory').then(result => {
 				    if(result.body.status === 0){
-				        // 手动拼接出最完整的分裂
-				        this.body.message.unshift({ title: "全部", id: 0 });
+				        // 手动拼接出最完整的分类列表
+				        result.body.message.unshift({ title: "全部", id: 0 });
 				        this.cates = result.body.message;
 					}
 				})
 			},
 			getPhotoListByCateId(cateId) {
-			    // 根据 分类Id，获取图片列表
-				this.$http.get('api/getimages/'+cateId).then(result => {
+			    // 根据分类Id，获取图片列表
+				this.$http.get('api/getimages/' + cateId).then(result => {
 				    if (result.body.status === 0){
 				        this.list = result.body.message;
 					}
-				})
+				});
 			}
         }
     }

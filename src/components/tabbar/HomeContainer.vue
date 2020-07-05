@@ -28,11 +28,10 @@
 					<div class="mui-media-body">联系我们</div></a></li>
 		</ul>
     </div>
-
 </template>
 
 <script>
-    import { Toast } from 'mint-ui'
+    import { Toast } from 'mint-ui';
 	import swiper from '../subcommponents/swiper.vue'
 
     export default {
@@ -47,13 +46,12 @@
         methods: {
             getLunbotu() { // 获取轮播图数据的方法
                 this.$http.get('api/getlunbo').then(result => {
-                    // if(result.body.status === 0) {
-                    //     this.lunbotuList = result.body.message;
-                    //     Toast("加载轮播图成功");
-                    // } else {
-                    //     Toast("加载轮播图失败。。。");
-                    // }
-					console.log(result.body)
+                    if(result.body.status === 0) {
+                        this.lunbotuList = result.body.message;
+                        // Toast("加载轮播图成功");
+                    } else {
+                        Toast("加载轮播图失败。。。");
+                    }
                 });
             }
         },

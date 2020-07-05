@@ -6,7 +6,7 @@
         <mt-button type="primary" size="large" @click="postComment">发表评论</mt-button>
 
         <div class="cmt-list">
-            <div class="cmt-item"v-for="(item,i) in comments" :key="item.add_time">
+            <div class="cmt-item" v-for="(item,i) in comments" :key="item.add_time">
                 <div class="cmt-title"></div>
                 第{{ i+1 }}楼&nbsp;&nbsp;用户：{{ item.user_name }}&nbsp;&nbsp;发表时间：{{ item.add_time | dateFormat }}
                 <div class="cmt-body">
@@ -15,13 +15,14 @@
             </div>
         </div>
 
-        <mt-button type="danger" size="large" plain @click="getMore">加载更多 </mt-button>
+        <mt-button type="danger" size="large" plain @click="getMore">加载更多</mt-button>
     </div>
 </template>
 
 <script>
+    import {Toast} from "mint-ui";
+
     export default {
-        name: "comment",
         data() {
             return {
                 pageIndex: 1, //默认展示第一页数据
@@ -34,15 +35,15 @@
         },
         methods: {
             getComments() {  //获取评论
-                this.$http.get('api/getcomments/'+this.id+'?pageindex=' + this.pageIndex).then(result => {
+                this.$http.get('api/getcomments/'+this.id+'? pageindex =' + this.pageIndex).then(result => {
                     if (result.body.status === 0) {
                         // this.comments = result.body.message;
-                        // 每当获取新评论数据的时候，不要把老数据清空，二是应该以老数据拼接上新数据
-                        this.comments = this.comments.concat(result.body.message)
+                        // 每当获取新评论数据的时候，不要把老数据清空，而是应该将老数据拼接上新数据
+                        this.comments = this.comments.concat(result.body.message);
                     } else {
                         Toast('获取评论失败！')
                     }
-                })
+                });
             },
             getMore() { //加载更多
                 this.pageIndex++;
@@ -58,7 +59,7 @@
                 this.$http.post('api/postcomment/' + this.$route.params.id, {
                     content: this.msg.trim()
                 })
-                .then(function () {
+                .then(function (result) {
                     if(result.body.status === 0 ) {
                         // 拼接出一个评论对象
                         var cmt = {
@@ -69,7 +70,7 @@
                         this.comments.unshift(cmt);
                         this.msg = "";
                     }
-                })
+                });
             }
         },
         props: ['id']

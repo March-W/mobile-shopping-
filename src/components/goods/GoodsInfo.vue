@@ -1,11 +1,11 @@
 <template>
     <div class="goodsinfo-container">
 
-        // 使用钩子函数实现购物车小球半场动画
+        <!--使用钩子函数实现购物车小球半场动画-->
         <transition
                 @before-enter = "beforeEnter"
                 @enter = "enter"
-                @ater-enter = "afterEnter">
+                @after-enter = "afterEnter">
             <div class="ball" v-show="ballFlag" ref="ball"></div>
         </transition>
 
@@ -31,6 +31,8 @@
                         <p>
                             <mt-button type="primary" size="small">立即购买</mt-button>
                             <mt-button type="danger" size="small" @click="addToShopCar">加入购物车</mt-button>
+
+
                         </p>
 					</div>
 				</div>
@@ -56,7 +58,7 @@
 
 <script>
     // 导入轮播图组件
-    import swiper from '../subcommponents/swiper.vue'
+    import swiper from "../subcommponents/swiper.vue";
     // 导入 数字选择框 组件
     import numbox from '../subcommponents/goodsinfo_number.vue'
 
@@ -64,7 +66,7 @@
         data() {
             return {
                 id: this.$route.params.id,    //将路由参数对象中的id挂载到data上，方便后期调用
-                lunbotu: [], //轮播图的数据
+                lunbotu: [], //轮播图 的数据
                 goodsinfo: {}, //获取商品的详细信息
                 ballFlag: false, //控制小球隐藏和显示的标识符
                 selectedCount: 1 //保存用户选中的商品数量，默认为1
@@ -107,14 +109,23 @@
 
             addToShopCar() {
                 this.ballFlag = !this.ballFlag;
-            },
 
+                //拼接出一个要保存到store中car数组中的商品信息对象
+                var goodsinfo = {id: this.id,
+                    count: this.selectedCount,
+                    price: this.goodsinfo.sell_price,
+                    selected: true
+                };
+                //调用store中的mutations将商品加入购物车
+                this.$store.commit('addToCar', goodsinfo);
+            },
             beforeEnter(el) {
-                el.style.transform = "translate(0,0)";
+                el.style.transform = "translate(0, 0)";
             },
             enter(el, done){
-                el.offseWidth;
+                el.offsetWidth;
 
+                //dom.getBoundingClientRect()返回矩形对象包含四个属性，分别表示元素各边与页面上边和左边的距离
                 // 获取小球在页面中的位置
                 const ballPosition = this.$refs.ball.getBoundingClientRect();
                 //通过操作DOM获取徽标在页面中的位置
@@ -126,7 +137,7 @@
 
                 // 使用ES6的模板字符串拼接字符
                 el.style.transform = `translate(${xDist}px, ${yDist}px)`;
-                el.style.transaction = "all 0.5s cubic-bezier(.4,-0.3,1,.68)";
+                el.style.transition = "all 0.5s cubic-bezier(.4,-0.3,1,.68)";
                 done();
             },
             afterEnter(el){
@@ -136,10 +147,9 @@
             getSelectedCount(count) {
                 // 当自组件把选中的数量传送给父组件的时候，把选中的值保存在data上
                 this.selectedCount = count;
-                // this.$emit("getcount", parseInt(this.$refs.numbox.value));
             }
         },
-        components: {
+         components: {
             swiper,
             numbox
         }
@@ -160,7 +170,7 @@
         .mui-card-footer {
             display: block;
             button {
-                margin: 10px 0;
+                margin: 15px 0;
             }
         }
         .ball {
@@ -172,7 +182,6 @@
             z-index: 99;
             top: 390px;
             left: 146px;
-
         }
     }
 </style>
